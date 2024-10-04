@@ -32,7 +32,6 @@ const server = http.createServer(app);
 // Start the server
 server.listen(PORT, async () => {
     await ConnectDb();
-    console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 // Export the server instance
