@@ -1,0 +1,80 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Login;
+const user_1 = require("../../model/user");
+const bcrypt_1 = require("bcrypt");
+const check_if_user_lock_1 = require("../../utils/check-if-user-lock");
+const message_1 = __importDefault(require("../../utils/message"));
+const gen_token_and_set_cookie_1 = require("../../utils/gen-token-and-set-cookie");
+function Login(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { email, username, password } = req.body;
+        const user = email || username;
+        if (!user || !password) {
+            return (0, message_1.default)(res, "Fill up all the blanks ", false, 400);
+        }
+        try {
+            // Find the user by either email or username using $or
+            const log_user = yield user_1.User.findOne({
+                $or: [
+                    { email: email }, // Check if email matches
+                    { username: username } // Check if username matches
+                ]
+            });
+            if (!log_user) {
+                return (0, message_1.default)(res, "Couldn't find your account", false, 400);
+            }
+            // Check if the user is locked
+            if ((0, check_if_user_lock_1.checkLockStatus)(log_user)) {
+                return res.status(403).json({ message: 'Account is locked. Try again later after 30 minutes.' });
+            }
+            // Compare the password with the hashed password in the database
+            const isPasswordValid = yield (0, bcrypt_1.compare)(password, log_user.password);
+            if (!isPasswordValid) {
+                let MAX_ATTEMPTS = 3;
+                // Increment failedAttempts by 1 atomically in MongoDB
+                yield user_1.User.updateOne({ _id: log_user._id }, {
+                    $inc: { failedAttempts: 1 } // Increment failedAttempts
+                });
+                // Re-fetch the user to get the updated failedAttempts value
+                const updatedUser = yield user_1.User.findById(log_user._id);
+                const remainingChances = MAX_ATTEMPTS - updatedUser.failedAttempts;
+                // If failedAttempts reaches 3, lock the account
+                if (updatedUser.failedAttempts >= 3) {
+                    updatedUser.lockUntil = new Date(Date.now() + 30 * 60 * 1000); // Lock for 30 minutes
+                    yield updatedUser.save(); // Save lockUntil field
+                    return (0, message_1.default)(res, "Account was locked due to too many failed attempts", false, 400);
+                }
+                return (0, message_1.default)(res, `Invalid credentials. You have ${remainingChances} remaining chances`, false, 400);
+            }
+            // Check if the user is verified
+            if (!log_user.isVerified) {
+                return (0, message_1.default)(res, "Your email is not verified", false, 400);
+            }
+            // Reset failed attempts after successful login
+            log_user.failedAttempts = 0;
+            log_user.lockUntil = null;
+            // Generate token and set cookie
+            (0, gen_token_and_set_cookie_1.generateTokenAndSetCookie)(res, log_user._id);
+            // Update last login time
+            log_user.lastLogin = new Date();
+            yield log_user.save(); // Save the reset state and last login time
+            return (0, message_1.default)(res, "You logged in successfully", true, 200);
+        }
+        catch (error) {
+            return res.status(500).json({ message: "Internal server error", success: false });
+        }
+    });
+}
