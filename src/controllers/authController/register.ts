@@ -28,6 +28,7 @@ export default async function Register(req: Request, res: Response) {
             console.log(clientIp)
             return Message(res, "The email is already in use", false, 400)
         }
+        
         if (checkUsername) {
             return Message(res, "The username is already in use", false, 400)
         }
