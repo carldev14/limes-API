@@ -11,23 +11,25 @@ export interface User extends Document {
     resetPasswordExpiresAt?: Date;
     verificationToken?: string;
     verificationTokenExpiresAt?: Date;
-    ip_a: string,
+    ip_a: string;
+    failedAttempts: number;
+    lockUntil: Date;
 }
 
 const userSchema = new Schema<User>({
     email: {
         type: String,
-        required: true,
+
         unique: true
     },
     password: {
         type: String,
-        required: true,
+
         unique: true
     },
     username: {
         type: String,
-        required: true,
+
         unique: true
     },
     lastLogin: {
@@ -38,6 +40,8 @@ const userSchema = new Schema<User>({
         type: Boolean,
         default: false
     },
+    failedAttempts: { type: Number, default: 0 },
+    lockUntil: { type: Date, default: null },
     ip_a: String,
     resetPasswordToken: String,
     resetPasswordExpiresAt: Date,

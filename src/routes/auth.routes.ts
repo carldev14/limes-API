@@ -1,9 +1,9 @@
 import express from 'express'
-import Register from '../authController/register';
-import VerifyEmail from '../authController/verify_email';
-import Login from '../authController/login';
-import Verify_ResetPassword from '../authController/verify-reset-password';
-import SendResetPassword from '../authController/send-reset-password';
+import Register from '../controllers/authController/register';
+import VerifyEmail from '../controllers/authController/verify_email';
+import Login from '../controllers/authController/login';
+import Verify_ResetPassword from '../controllers/authController/verify-reset-password';
+import SendResetPassword from '../controllers/authController/send-reset-password';
 
 const router = express.Router();
 
