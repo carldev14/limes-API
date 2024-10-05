@@ -13,7 +13,7 @@ const app = express();
 // Allow JSON and cookie parsing
 app.use(express.json());
 app.use(cookieParser());
-
+app.set('trust proxy', true);
 // Enable CORS
 app.use(cors({ origin: 'http://localhost:3000' }));
 

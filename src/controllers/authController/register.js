@@ -28,7 +28,6 @@ function Register(req, res) {
             return (0, message_1.default)(res, 'Fill up all the blanks', false, 400);
         }
         try {
-            req.headers['cf-connecting-ip'];
             req.headers['x-real-ip'];
             req.headers['x-forwarded-for'];
             const clientIp = req.socket.remoteAddress;

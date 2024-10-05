@@ -25,6 +25,7 @@ const app = (0, express_1.default)();
 // Allow JSON and cookie parsing
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
+app.set('trust proxy', true);
 // Enable CORS
 app.use((0, cors_1.default)({ origin: 'http://localhost:3000' }));
 // Use the authentication routes

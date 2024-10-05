@@ -19,7 +19,6 @@ export default async function Register(req: Request, res: Response) {
         return Message(res, 'Fill up all the blanks', false, 400)
     }
     try {
-        req.headers['cf-connecting-ip'] 
         req.headers['x-real-ip']
         req.headers['x-forwarded-for']
         const clientIp = req.socket.remoteAddress
