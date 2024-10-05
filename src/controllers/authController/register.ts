@@ -19,8 +19,10 @@ export default async function Register(req: Request, res: Response) {
         return Message(res, 'Fill up all the blanks', false, 400)
     }
     try {
-        const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
+        req.headers['cf-connecting-ip'] 
+        req.headers['x-real-ip']
+        req.headers['x-forwarded-for']
+        const clientIp = req.socket.remoteAddress
         const checkEmail = await User.findOne({ email });
         const checkUsername = await User.findOne({ username });
 

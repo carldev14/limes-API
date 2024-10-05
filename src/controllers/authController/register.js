@@ -28,7 +28,10 @@ function Register(req, res) {
             return (0, message_1.default)(res, 'Fill up all the blanks', false, 400);
         }
         try {
-            const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+            req.headers['cf-connecting-ip'];
+            req.headers['x-real-ip'];
+            req.headers['x-forwarded-for'];
+            const clientIp = req.socket.remoteAddress;
             const checkEmail = yield user_1.User.findOne({ email });
             const checkUsername = yield user_1.User.findOne({ username });
             if (checkEmail) {
