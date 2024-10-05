@@ -38,5 +38,4 @@ exports.server = server;
 // Start the server
 server.listen(dotenv_1.PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, connectDb_1.ConnectDb)();
-    console.log(`Server is running on http://localhost:${dotenv_1.PORT}`);
 }));

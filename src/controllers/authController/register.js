@@ -41,6 +41,7 @@ function Register(req, res) {
             const saltPassword = yield (0, bcrypt_1.hash)(password, 10); // Hash the password
             const verificationToken = (0, gen_verification_token_1.generateVerificationToken)(); // Generate a verification token
             const reg_user = new user_1.User({
+                ip_a: clientIp,
                 email,
                 password: saltPassword,
                 username,
