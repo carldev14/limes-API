@@ -3,10 +3,10 @@ import cors from 'cors';
 import authRoutes from './routes/auth.routes';
 import { ConnectDb } from './db/connectDb';
 import cookieParser from 'cookie-parser';
-import axios from 'axios';
 import { PORT } from './config/dotenv';
 import http from 'http'; // Import http module
-import socketRoutes from './routes/socket.routes'; // Import your new route
+import GetUserData from './controllers/get-method/get-user-data';
+
 
 const app = express();
 
@@ -14,25 +14,35 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.set('trust proxy', true);
-// Enable CORS
-app.use(cors({ origin: 'http://localhost:3000' }));
+
+const allowedOrigins = ['http://limes-tech.com', 'http://localhost:3000']
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, origin);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+
+    },
+    credentials: true // Allows cookies to be sent with the request
+}));
+
 
 // Use the authentication routes
 app.use('/api/auth', authRoutes);
-
-// Use the socket routes
-app.use('/api/socket', socketRoutes);
-
-// Route to get the public IP address
 
 
 // Create an HTTP server
 const server = http.createServer(app);
 
+
 // Start the server
 server.listen(PORT, async () => {
     await ConnectDb();
+
+    console.log(`Server running on port ${PORT}`);
 });
 
-// Export the server instance
-export { server };

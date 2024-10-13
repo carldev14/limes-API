@@ -8,11 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = LogOut;
-function LogOut(req, res) {
+exports.default = Logout;
+const message_1 = __importDefault(require("../../utils/message"));
+function Logout(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        res.clearCookie("token");
-        return;
+        res.clearCookie("token"); // clear the cookie stored
+        return (0, message_1.default)(res, "Logout successfully", true, 200);
     });
 }

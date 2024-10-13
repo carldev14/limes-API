@@ -9,10 +9,13 @@ const verify_email_1 = __importDefault(require("../controllers/authController/ve
 const login_1 = __importDefault(require("../controllers/authController/login"));
 const verify_reset_password_1 = __importDefault(require("../controllers/authController/verify-reset-password"));
 const send_reset_password_1 = __importDefault(require("../controllers/authController/send-reset-password"));
+const verify_token_1 = __importDefault(require("../middleware/verify-token"));
+const log_out_1 = __importDefault(require("../controllers/authController/log-out"));
 const router = express_1.default.Router();
+router.post("/check-auth", verify_token_1.default);
 router.post("/register", register_1.default);
 router.post("/login", login_1.default);
-router.post("/logout");
+router.post("/logout", log_out_1.default);
 router.post("/verify-email", verify_email_1.default);
 router.post("/verify-reset-password", verify_reset_password_1.default);
 router.post("/send-reset-password", send_reset_password_1.default);

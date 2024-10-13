@@ -13,7 +13,9 @@ export const generateTokenAndSetCookie = (res: Response, userId: string) => {
 		secure: NODE_ENV === "production",
 		sameSite: "strict",
 		maxAge: 7 * 24 * 60 * 60 * 1000,
+		domain: 'localhost', // Ensure it works across ports
 	});
-    console.log('Generated successfully.')
+
 	return token;
+
 };

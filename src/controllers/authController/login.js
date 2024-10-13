@@ -20,26 +20,28 @@ const message_1 = __importDefault(require("../../utils/message"));
 const gen_token_and_set_cookie_1 = require("../../utils/gen-token-and-set-cookie");
 function Login(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { email, username, password } = req.body;
-        const user = email || username;
-        if (!user || !password) {
+        const { username_or_email, password } = req.body;
+        // console.log(username_or_email, password);
+        if (!username_or_email || !password) {
             return (0, message_1.default)(res, "Fill up all the blanks ", false, 400);
         }
         try {
             // Find the user by either email or username using $or
             const log_user = yield user_1.User.findOne({
                 $or: [
-                    { email: email }, // Check if email matches
-                    { username: username } // Check if username matches
+                    { email: username_or_email }, // Check if email matches
+                    { username: username_or_email } // Check if username matches
                 ]
             });
             if (!log_user) {
                 return (0, message_1.default)(res, "Couldn't find your account", false, 400);
             }
+            ;
             // Check if the user is locked
             if ((0, check_if_user_lock_1.checkLockStatus)(log_user)) {
                 return res.status(403).json({ message: 'Account is locked. Try again later after 30 minutes.' });
             }
+            ;
             // Compare the password with the hashed password in the database
             const isPasswordValid = yield (0, bcrypt_1.compare)(password, log_user.password);
             if (!isPasswordValid) {
@@ -57,12 +59,15 @@ function Login(req, res) {
                     yield updatedUser.save(); // Save lockUntil field
                     return (0, message_1.default)(res, "Account was locked due to too many failed attempts", false, 400);
                 }
+                ;
                 return (0, message_1.default)(res, `Invalid credentials. You have ${remainingChances} remaining chances`, false, 400);
             }
+            ;
             // Check if the user is verified
             if (!log_user.isVerified) {
                 return (0, message_1.default)(res, "Your email is not verified", false, 400);
             }
+            ;
             // Reset failed attempts after successful login
             log_user.failedAttempts = 0;
             log_user.lockUntil = null;

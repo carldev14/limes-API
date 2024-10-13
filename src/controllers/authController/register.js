@@ -22,13 +22,12 @@ const message_1 = __importDefault(require("../../utils/message"));
 function Register(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         // Directly access req.body for the data
-        const data = req.body;
-        const { email, password, username } = data;
+        const { email, password, username } = req.body;
+        console.log(email, password, username);
         if (!email || !password || !username) {
             return (0, message_1.default)(res, 'Fill up all the blanks', false, 400);
         }
         try {
-            req.headers['x-real-ip'];
             req.headers['x-forwarded-for'];
             const clientIp = req.socket.remoteAddress;
             const checkEmail = yield user_1.User.findOne({ email });

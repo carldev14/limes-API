@@ -2,22 +2,20 @@ import { Request, Response } from "express";
 import { User } from "../../model/user"; // Ensure the path is correct
 import { hash } from 'bcrypt';
 import { generateVerificationToken } from "../../utils/gen-verification-token"; // Ensure this path is correct
-import { RegisterFormInterface } from "../../types/register_formData"; // Ensure the path is correct
+import { RegisterFormInterface } from "../../types/form_interfaces"; // Ensure the path is correct
 import { sendVerificationEmail } from "../../nodemailer/send";
 import { generateTokenAndSetCookie } from "../../utils/gen-token-and-set-cookie";
 import Message from "../../utils/message";
-import axios from "axios";
-
-
 
 export default async function Register(req: Request, res: Response) {
     // Directly access req.body for the data
-    const data = req.body;
-    const { email, password, username }: RegisterFormInterface = data;
+    const { email, password, username }: RegisterFormInterface = req.body;
+    console.log(email, password, username)
 
     if (!email || !password || !username) {
         return Message(res, 'Fill up all the blanks', false, 400)
     }
+
     try {
         req.headers['x-forwarded-for']
         const clientIp = req.socket.remoteAddress
