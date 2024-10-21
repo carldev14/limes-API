@@ -36,7 +36,9 @@ function VerifyEmail(req, res) {
             return (0, message_1.default)(res, "Your email is now verified", true, 400);
         }
         catch (error) {
-            return res.status(500).json({ message: "Internal server error", success: false });
+            return res
+                .status(500)
+                .json({ message: "Internal server error", success: false });
         }
     });
 }

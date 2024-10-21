@@ -34,7 +34,7 @@ function Verify_ResetPassword(req, res) {
             return (0, message_1.default)(res, "You successfully reset your password", false, 201);
         }
         catch (error) {
-            console.log('Error', error);
+            console.log("Error", error);
         }
     });
 }
