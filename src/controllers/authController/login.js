@@ -21,14 +21,12 @@ const gen_token_and_set_cookie_1 = require("../../utils/gen-token-and-set-cookie
 function Login(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { username_or_email, password } = req.body;
-        // console.log(username_or_email, password);
         if (!username_or_email || !password) {
             return res
                 .status(400)
                 .json({ success: false, error: "Fill up all the fields" });
         }
         try {
-            // Find the user by either email or username using $or
             const log_user = yield user_1.User.findOne({
                 $or: [
                     { email: username_or_email }, // Check if email matches
@@ -38,7 +36,7 @@ function Login(req, res) {
             if (!log_user) {
                 return res
                     .status(400)
-                    .json({ success: false, error: "User is not found" });
+                    .json({ success: false, error: "Invalid credentials. Re-check your inputs" });
             }
             // Check if the user is locked
             if ((0, check_if_user_lock_1.checkLockStatus)(log_user)) {
@@ -47,18 +45,14 @@ function Login(req, res) {
                     error: "The account was locked for 30 minutes, because too many failed attempts",
                 });
             }
-            // Compare the password with the hashed password in the database
             const isPasswordValid = yield (0, bcrypt_1.compare)(password, log_user.password);
             if (!isPasswordValid) {
-                let MAX_ATTEMPTS = 3;
-                // Increment failedAttempts by 1 atomically in MongoDB
+                const MAX_ATTEMPTS = 3;
                 yield user_1.User.updateOne({ _id: log_user._id }, {
                     $inc: { failedAttempts: 1 }, // Increment failedAttempts
                 });
-                // Re-fetch the user to get the updated failedAttempts value
                 const updatedUser = yield user_1.User.findById(log_user._id);
                 const remainingChances = MAX_ATTEMPTS - updatedUser.failedAttempts;
-                // If failedAttempts reaches 3, lock the account
                 if (updatedUser.failedAttempts >= 3) {
                     updatedUser.lockUntil = new Date(Date.now() + 30 * 60 * 1000); // Lock for 30 minutes
                     yield updatedUser.save(); // Save lockUntil field
@@ -69,26 +63,32 @@ function Login(req, res) {
                 }
                 return res.status(400).json({
                     success: false,
-                    error: `Invalid credentials. You only have remaining ${remainingChances} chances. Please try it again!`,
+                    error: `Invalid credentials. You only have ${remainingChances} chances remaining. Please try again.`,
                 });
             }
-            // Check if the user is verified
             if (!log_user.isVerified) {
                 return res
                     .status(400)
-                    .json({ success: false, error: "User is not verified" });
+                    .json({ success: false, error: "Account is not verified" });
             }
             // Reset failed attempts after successful login
             log_user.failedAttempts = 0;
             log_user.lockUntil = null;
             // Generate token and set cookie
             (0, gen_token_and_set_cookie_1.generateTokenAndSetCookie)(res, log_user._id);
-            // Update last login time
-            log_user.lastLogin = new Date();
+            const today = new Date();
+            // Format date and time separately and combine them
+            const formattedTimeAndDate = new Intl.DateTimeFormat('en-US', {
+                dateStyle: "full",
+                timeStyle: "medium"
+            });
+            log_user.lastLogin = formattedTimeAndDate.format(today);
             yield log_user.save(); // Save the reset state and last login time
+            // Return success message after login
             return (0, message_1.default)(res, "You logged in successfully", true, 200);
         }
         catch (error) {
+            console.log(error);
             return res
                 .status(500)
                 .json({ error: "Internal server error", success: false });

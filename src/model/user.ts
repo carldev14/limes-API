@@ -5,7 +5,7 @@ export interface User extends Document {
     email: string;
     password: string;
     username: string;
-    lastLogin: Date;
+    lastLogin: string;
     isVerified: boolean; // Ensure this matches the schema
     resetPasswordToken?: string;
     resetPasswordExpiresAt?: Date;
@@ -33,8 +33,7 @@ const userSchema = new Schema<User>({
         unique: true
     },
     lastLogin: {
-        type: Date,
-        default: Date.now
+        type: String,
     },
     isVerified: { // Ensure this matches the schema
         type: Boolean,

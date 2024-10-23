@@ -51,7 +51,7 @@ export default async function Register(req: Request, res: Response) {
 
     await reg_user.save();
     sendVerificationEmail(reg_user.email, verificationToken, reg_user.name);
-    return Message(res, "User created successfully", true, 201);
+    return Message(res, "Account created successfully", true, 201);
   } catch (error) {
     console.log(error);
     return res

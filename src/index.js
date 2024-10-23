@@ -25,7 +25,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.set("trust proxy", true);
-const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000"];
+const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000", "https://spotty-moose-75.telebit.io "];
 app.use((0, cors_1.default)({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
@@ -45,5 +45,5 @@ const server = http_1.default.createServer(app);
 // Start the server
 server.listen(dotenv_1.PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, connectDb_1.ConnectDb)();
-    console.log('running');
+    console.log(`running at ${dotenv_1.PORT}`);
 }));

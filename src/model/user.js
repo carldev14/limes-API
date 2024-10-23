@@ -21,8 +21,7 @@ const userSchema = new mongoose_1.Schema({
         unique: true
     },
     lastLogin: {
-        type: Date,
-        default: Date.now
+        type: String,
     },
     isVerified: {
         type: Boolean,

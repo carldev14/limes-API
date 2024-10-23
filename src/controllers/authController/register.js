@@ -56,7 +56,7 @@ function Register(req, res) {
             });
             yield reg_user.save();
             (0, send_1.sendVerificationEmail)(reg_user.email, verificationToken, reg_user.name);
-            return (0, message_1.default)(res, "User created successfully", true, 201);
+            return (0, message_1.default)(res, "Account created successfully", true, 201);
         }
         catch (error) {
             console.log(error);

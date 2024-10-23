@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.set("trust proxy", true);
 
-const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000"];
+const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000", "https://spotty-moose-75.telebit.io "];
 
 app.use(
   cors({
@@ -40,5 +40,5 @@ const server = http.createServer(app);
 // Start the server
 server.listen(PORT, async () => {
   await ConnectDb();
-  console.log('running')
+  console.log(`running at ${PORT}`)
 });
