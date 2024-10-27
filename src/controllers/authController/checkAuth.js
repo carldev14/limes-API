@@ -13,18 +13,28 @@ exports.checkAuth = void 0;
 const user_1 = require("../../model/user");
 const checkAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // Assuming req.userId is set by some authentication middleware
         const user = yield user_1.User.findById(req.userId).select("-password");
+        // Check if the user exists
         if (!user) {
-            return res.status(400).json({ success: false, error: "User not found" });
+            return res
+                .status(404)
+                .json({ success: false, error: "User not found", isUserFound: false });
         }
+        // Check if the user is verified
         if (!user.isVerified) {
-            return res.status(400).json({ success: false, error: 'User is not verified' });
+            return res
+                .status(200)
+                .json({ success: true, isEmailVerified: false, isUserFound: true });
         }
-        res.status(200).json({ success: true });
+        // If the user is found and verified
+        res
+            .status(200)
+            .json({ success: true, isEmailVerified: true, isUserFound: true });
     }
-    catch (error) {
-        console.log("Error in checkAuth ", error);
-        res.status(400).json({ success: false, error: error });
+    catch (err) {
+        console.error("Error in checkAuth:", err); // Changed to console.error for better logging
+        res.status(500).json({ success: false, error: "Internal server error" }); // Generic error response
     }
 });
 exports.checkAuth = checkAuth;

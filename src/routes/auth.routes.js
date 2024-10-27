@@ -17,7 +17,7 @@ router.get("/check-auth", verify_token_1.verifyToken, checkAuth_1.checkAuth);
 router.post("/register", register_1.default);
 router.post("/login", login_1.default);
 router.post("/logout", log_out_1.default);
-router.post("/verify-email", verify_email_1.default);
+router.post("/verify-email", verify_token_1.verifyToken, verify_email_1.default);
 router.post("/verify-reset-password", verify_reset_password_1.default);
 router.post("/send-reset-password", send_reset_password_1.default);
 exports.default = router;

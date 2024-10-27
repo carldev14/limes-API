@@ -69,11 +69,6 @@ export default async function Login(req: Request, res: Response) {
       });
     }
 
-    if (!log_user.isVerified) {
-      return res
-        .status(400)
-        .json({ success: false, error: "Account is not verified" });
-    }
 
     // Reset failed attempts after successful login
     log_user.failedAttempts = 0;

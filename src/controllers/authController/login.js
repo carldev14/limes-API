@@ -66,11 +66,6 @@ function Login(req, res) {
                     error: `Invalid credentials. You only have ${remainingChances} chances remaining. Please try again.`,
                 });
             }
-            if (!log_user.isVerified) {
-                return res
-                    .status(400)
-                    .json({ success: false, error: "Account is not verified" });
-            }
             // Reset failed attempts after successful login
             log_user.failedAttempts = 0;
             log_user.lockUntil = null;

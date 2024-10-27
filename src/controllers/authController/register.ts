@@ -46,7 +46,7 @@ export default async function Register(req: Request, res: Response) {
       password: saltPassword,
       username,
       verificationToken,
-      verificationTokenExpiresAt: Date.now() + 3600000, // 1 hour
+      verificationTokenExpiresAt: Date.now() + 600000, // 10 minutes
     });
 
     await reg_user.save();
