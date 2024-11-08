@@ -14,7 +14,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.set("trust proxy", true);
 
-const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000", "https://spotty-moose-75.telebit.io/", "http://192.168.1.10:3000", "https://limes.vercel.app/"]
+// List of allowed origins
+const allowedOrigins = [
+  "http://limes-tech.com",
+  "http://localhost:3000",
+  "https://spotty-moose-75.telebit.io",
+  "http://192.168.1.10:3000",
+  "https://limes.vercel.app"
+];
 
 app.use(
   cors({
@@ -31,9 +38,7 @@ app.use(
 );
 
 // Use the authentication routes
-
 app.use("/api", authRoutes, UserRoutes);
-
 
 // Create an HTTP server
 const server = http.createServer(app);
@@ -41,5 +46,5 @@ const server = http.createServer(app);
 // Start the server
 server.listen(PORT, async () => {
   await ConnectDb();
-  console.log(`running at ${PORT}`)
+  console.log(`running at ${PORT}`);
 });
