@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.set("trust proxy", true);
 
-const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000", "https://spotty-moose-75.telebit.io/", "http://192.168.1.10:3000", "https://limes.vercel.app/login"]
+const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000", "https://spotty-moose-75.telebit.io/", "http://192.168.1.10:3000", "https://limes.vercel.app/"]
 
 app.use(
   cors({
