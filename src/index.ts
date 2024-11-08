@@ -14,25 +14,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.set("trust proxy", true);
 
-// List of allowed origins
-const allowedOrigins = [
-  "https://limes.vercel.app"
-];
+const corsOptions = {
+  origin: 'limes.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add the methods you need
+  allowedHeaders: ['*'], // Adjust as needed
+};
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, origin);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // Allows cookies to be sent with the request
-  })
-);
-app.options('*', cors()); // This will allow preflight requests to all routes
+app.use(cors(corsOptions));
 
 // Use the authentication routes
 app.use("/api", authRoutes, UserRoutes);
