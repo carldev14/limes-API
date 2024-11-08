@@ -16,7 +16,6 @@ app.set("trust proxy", true);
 
 // List of allowed origins
 const allowedOrigins = [
-  "http://localhost:3000",
   "https://limes.vercel.app"
 ];
 
