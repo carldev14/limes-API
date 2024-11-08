@@ -79,9 +79,9 @@ export default async function Login(req: Request, res: Response) {
 
     const today = new Date();
     // Format date and time separately and combine them
-    const formattedTimeAndDate = new Intl.DateTimeFormat('en-US', {
-      dateStyle: "full",
-      timeStyle: "medium"
+    const formattedTimeAndDate = new Intl.DateTimeFormat("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
     });
 
     log_user.lastLogin = formattedTimeAndDate.format(today);

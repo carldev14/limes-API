@@ -15,7 +15,7 @@ const generateTokenAndSetCookie = (res, userId) => {
         secure: dotenv_1.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        domain: 'localhost', // Ensure it works across ports
+        domain: 'localhost'
     });
     return token;
 };

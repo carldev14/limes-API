@@ -15,6 +15,7 @@ const transporter = nodemailer.createTransport({
 
 export async function sendVerificationEmail(email: string, verificationToken: string, name: string) {
     try {
+
         const mailOptions = {
             from: EMAIL,
             to: email,

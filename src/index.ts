@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.set("trust proxy", true);
 
-const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000", "https://spotty-moose-75.telebit.io "];
+const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000", "https://spotty-moose-75.telebit.io/", "http://192.168.1.10:3000"]
 
 app.use(
   cors({
@@ -33,6 +33,7 @@ app.use(
 // Use the authentication routes
 
 app.use("/api", authRoutes, UserRoutes);
+
 
 // Create an HTTP server
 const server = http.createServer(app);

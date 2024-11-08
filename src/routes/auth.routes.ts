@@ -8,6 +8,7 @@ import { verifyToken } from "../middleware/verify-token";
 
 import Logout from "../controllers/authController/log-out";
 import { checkAuth } from "../controllers/authController/checkAuth";
+import resendVerifyEmail from "../controllers/authController/resend-verify-email";
 
 const router = express.Router();
 
@@ -17,8 +18,8 @@ router.post("/register", Register);
 
 router.post("/login", Login);
 
-router.post("/logout", Logout);
-
+router.delete("/logout", Logout);
+router.post("/resend-email-verification", verifyToken, resendVerifyEmail);
 router.post("/verify-email", verifyToken, VerifyEmail);
 router.post("/verify-reset-password", Verify_ResetPassword);
 router.post("/send-reset-password", SendResetPassword);

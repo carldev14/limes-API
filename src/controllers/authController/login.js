@@ -73,9 +73,9 @@ function Login(req, res) {
             (0, gen_token_and_set_cookie_1.generateTokenAndSetCookie)(res, log_user._id);
             const today = new Date();
             // Format date and time separately and combine them
-            const formattedTimeAndDate = new Intl.DateTimeFormat('en-US', {
-                dateStyle: "full",
-                timeStyle: "medium"
+            const formattedTimeAndDate = new Intl.DateTimeFormat("en-US", {
+                dateStyle: "medium",
+                timeStyle: "short",
             });
             log_user.lastLogin = formattedTimeAndDate.format(today);
             yield log_user.save(); // Save the reset state and last login time

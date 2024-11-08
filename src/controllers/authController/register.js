@@ -52,7 +52,7 @@ function Register(req, res) {
                 password: saltPassword,
                 username,
                 verificationToken,
-                verificationTokenExpiresAt: Date.now() + 600000, // 10 minutes
+                verificationTokenExpiresAt: Date.now() + 300000, // 5 minutes
             });
             yield reg_user.save();
             (0, send_1.sendVerificationEmail)(reg_user.email, verificationToken, reg_user.name);

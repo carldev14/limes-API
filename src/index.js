@@ -25,7 +25,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.set("trust proxy", true);
-const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000", "https://spotty-moose-75.telebit.io "];
+const allowedOrigins = ["http://limes-tech.com", "http://localhost:3000", "https://spotty-moose-75.telebit.io/", "http://192.168.1.10:3000"];
 app.use((0, cors_1.default)({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)

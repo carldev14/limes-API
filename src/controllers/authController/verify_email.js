@@ -17,24 +17,31 @@ const user_1 = require("../../model/user");
 const message_1 = __importDefault(require("../../utils/message"));
 function VerifyEmail(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { code } = req.body;
-        console.log(code, req.userId);
+        const { otpCode } = req.body;
+        console.log(otpCode, req.userId);
         try {
             const user = yield user_1.User.findOne({
-                verificationToken: code,
-                _id: req.userId
+                verificationToken: otpCode,
+                _id: req.userId,
             });
             // Check if the user exists
             if (!user) {
-                return res.status(400).json({ error: "User not found or invalid OTP provided", success: false });
+                return res
+                    .status(400)
+                    .json({ error: "Invalid OTP provided", success: false });
             }
             // Check if the verification token is present
             if (!user.verificationToken) {
-                return res.status(400).json({ error: "Invalid OTP provided", success: false });
+                return res
+                    .status(400)
+                    .json({ error: "Invalid OTP provided", success: false });
             }
             // Check if the OTP has expired
             if (user.verificationTokenExpiresAt.getTime() < Date.now()) {
-                return (0, message_1.default)(res, "OTP has expired", false, 400);
+                return res.status(400).json({
+                    error: "OTP are expired. ",
+                    success: false,
+                });
             }
             // Update user verification status
             user.isVerified = true;

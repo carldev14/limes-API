@@ -12,11 +12,13 @@ const send_reset_password_1 = __importDefault(require("../controllers/authContro
 const verify_token_1 = require("../middleware/verify-token");
 const log_out_1 = __importDefault(require("../controllers/authController/log-out"));
 const checkAuth_1 = require("../controllers/authController/checkAuth");
+const resend_verify_email_1 = __importDefault(require("../controllers/authController/resend-verify-email"));
 const router = express_1.default.Router();
 router.get("/check-auth", verify_token_1.verifyToken, checkAuth_1.checkAuth);
 router.post("/register", register_1.default);
 router.post("/login", login_1.default);
-router.post("/logout", log_out_1.default);
+router.delete("/logout", log_out_1.default);
+router.post("/resend-email-verification", verify_token_1.verifyToken, resend_verify_email_1.default);
 router.post("/verify-email", verify_token_1.verifyToken, verify_email_1.default);
 router.post("/verify-reset-password", verify_reset_password_1.default);
 router.post("/send-reset-password", send_reset_password_1.default);
