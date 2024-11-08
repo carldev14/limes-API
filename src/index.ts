@@ -16,23 +16,19 @@ app.set("trust proxy", true);
 
 // List of allowed origins
 const allowedOrigins = [
-  "https://limes.vercel.app", // Vercel frontend
-  "http://localhost:3000", // Local development (if applicable)
+  "http://limes-tech.com",
+  "http://localhost:3000",
+  "https://spotty-moose-75.telebit.io",
+  "http://192.168.1.10:3000",
+  "https://limes.vercel.app",
 ];
-app.options('*', cors()); // Allow preflight requests
 
-app.use(cors({
-  origin: function (origin, callback) {
-    console.log("Incoming Origin: ", origin); // Log the incoming origin
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, origin);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-}));
-
+app.use(
+  cors({
+    origin: "*",
+    credentials: true, // Allows cookies to be sent with the request
+  })
+);
 
 // Use the authentication routes
 app.use("/api", authRoutes, UserRoutes);
