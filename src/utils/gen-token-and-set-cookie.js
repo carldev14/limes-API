@@ -12,10 +12,10 @@ const generateTokenAndSetCookie = (res, userId) => {
     });
     res.cookie("token", token, {
         httpOnly: true,
-        secure: dotenv_1.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        domain: 'https://limes-express-backend.onrender.com'
+        secure: true, // Change to true if using HTTPS
+        sameSite: "none", // Ensure secure is true if using sameSite: 'none'
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        domain: "https://limes-apis.onrender.com", // Correct domain format
     });
     return token;
 };
