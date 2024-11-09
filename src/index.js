@@ -45,7 +45,7 @@ app.use((0, cors_1.default)({
 // Use the authentication routes
 app.use("/api", auth_routes_1.default, user_routes_1.default);
 // Start the server
-app.listen(4000, '192.168.1.10', () => __awaiter(void 0, void 0, void 0, function* () {
+app.listen(4000, () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, connectDb_1.ConnectDb)();
     console.log(`Server running at http://192.168.1.10:${dotenv_1.PORT}/`);
 }));
